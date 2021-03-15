@@ -1,8 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Welcome to the Jobber</h1>
+<div class="row">
+    <div class="col s4">
+        <h3>Recruitment Redefined</h3>
+        <h5>We have the right position for you, guaranteed</h5>
+    </div>
+    <div class="col s8">
+        <img src="https://i.imgur.com/8I7pftrl.jpg" alt="jobber-home">
+    </div>
+</div>
 <hr />
-<p>Create the events!</p>
+
+<input type="search" id="events-search" name="search">
+<input type="submit" id="search" class="btn" value="Search">
+
+{% comment %} Events down here {% endcomment %}
 
 {% endblock %}
