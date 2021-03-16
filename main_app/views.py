@@ -4,18 +4,22 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserUpdateForm, ProfileUpdateForm
+from .models import Profile
 def home(request):
     
   return render(request, 'home.html')
+
 # for register of the user
 def register(response):
-    error_message = ''
+    
     if response.method == "POST":
         form = RegisterForm(response.POST)
         if form.is_valid():
-            form.save()
-
-        return redirect('/')
+            user = form.save()
+            profile = Profile(user = user, bio = '' )
+            profile.save()
+            login(response, user)
+        return redirect('profile')
     else:
         form = RegisterForm()
 
@@ -34,8 +38,10 @@ def profile(request):
              
              return redirect('profile')
     else:
-        p_form = ProfileUpdateForm(instance=request.user)
-        u_form = UserUpdateForm(instance = request.user.profile)
+       
+        profile = Profile.objects.get(user_id=request.user.id)
+        p_form = ProfileUpdateForm(instance=profile)
+        u_form = UserUpdateForm(instance = request.user)
 
     context={'p_form': p_form, 'u_form': u_form}
 
