@@ -12,12 +12,12 @@ def home(request):
 
 # for register of the user
 def register(response):
-    error_message = ''
+    
     if response.method == "POST":
         form = RegisterForm(response.POST)
         if form.is_valid():
             user = form.save()
-            profile = Profile(user=user, bio='')
+            profile = Profile(user = user, bio = '' )
             profile.save()
             login(response, user)
         return redirect('profile')
@@ -38,6 +38,7 @@ def profile(request):
              
              return redirect('profile')
     else:
+       
         profile = Profile.objects.get(user_id=request.user.id)
         p_form = ProfileUpdateForm(instance=profile)
         u_form = UserUpdateForm(instance = request.user)
