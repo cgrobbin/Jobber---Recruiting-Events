@@ -3,8 +3,15 @@
 {% comment %} is_authenciated will help to run get the username attribute if they are looged in {% endcomment %}
 {% if user.is_authenticated %}
  
-<h1>Welcome , {{ user.get_username }}</h1>
-<p>join date : {{user.date_joined}}</p>
+<h2>Welcome , {{ user.get_username }}</h1>
+<p>{{user.email}}</p>
+<p>{{user.profile.bio}}</p>
+<form method='POST' enctype="multipart/form-data">
+    {%csrf_token%}
+    {{u_form.as_p}}
+    {{p_form.as_p}}
+    <button type='submit'>Update</button>
+</form>
 <hr />
 {% endif %}
 
