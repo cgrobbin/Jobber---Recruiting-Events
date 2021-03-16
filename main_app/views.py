@@ -4,10 +4,11 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserUpdateForm, ProfileUpdateForm
-from .models import Profile
+from .models import Profile, Event
+
 def home(request):
-    
-  return render(request, 'home.html')
+    events = Event.objects.all().order_by('-date')
+    return render(request, 'home.html', { 'events': events })
 
 # for register of the user
 def register(response):
@@ -24,9 +25,8 @@ def register(response):
         form = RegisterForm()
 
     return render(response, "registration/register.html",{'form' : form})
+
 # after logging in they will land on profile by default.
-
-
 @login_required
 def profile(request):
     if request.method == 'POST':
@@ -46,4 +46,7 @@ def profile(request):
     context={'p_form': p_form, 'u_form': u_form}
 
     return render(request, 'profile.html',context)
-       
+
+# About View
+def about(request):
+    return render(request, 'about.html')
