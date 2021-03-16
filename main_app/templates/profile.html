@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+{% comment %} is_authenciated will help to run get the username attribute if they are looged in {% endcomment %}
+{% if user.is_authenticated %}
+ 
+<h1>Welcome , {{ user.get_username }}</h1>
+<p>join date : {{user.date_joined}}</p>
+<hr />
+{% endif %}
+
+{% endblock %}
