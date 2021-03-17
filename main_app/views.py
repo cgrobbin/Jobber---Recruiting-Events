@@ -5,7 +5,7 @@ from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserUpdateForm, ProfileUpdateForm
 from .models import Profile, Event
-
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -56,12 +56,14 @@ def about(request):
 
 # Event Details
 @login_required
+
 def event_detail(request, event_id):
     event = Event.objects.get(id=event_id)
     return render(request, 'events/detail.html', { 'event': event })
 
 # Register user for event
 @login_required
+
 def add_registration(request, event_id):
     event = Event.objects.get(id=event_id)
     event.users.add(request.user.id)
@@ -77,6 +79,7 @@ def search(request):
     
     params = {'events': events, 'query': query }
     return render(request, 'search.html', params)
+    
 
 # focus contains only three option.
 def searchoption(request):
@@ -84,5 +87,11 @@ def searchoption(request):
     events = Event.objects.filter(focus__icontains = option)
 
     return render(request, 'search.html',{'events': events})
+
+
+
+ 
+ 
+
 
 
