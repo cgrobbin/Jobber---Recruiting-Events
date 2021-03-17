@@ -31,5 +31,7 @@ class Event(models.Model):
         max_length=250,
         default='https://us05web.zoom.us/j/7915630422?pwd=Q2hnV2NnUEdFVTNYNUJRTWtHdDlzZz09'
         )
+    users = models.ManyToManyField(User)
+
     def __str__(self):
         return self.title
