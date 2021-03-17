@@ -10,5 +10,6 @@ urlpatterns = [
     path('searchoption/',views.searchoption,name = 'searchoption'),
     path('events/<int:event_id>/', views.event_detail, name='detail'),
     path('events/<int:event_id>/add_registration/', views.add_registration, name='add_registration'),
+    path('events/<int:event_id>/remove_registration/', views.remove_registration, name='remove_registration'),
 ]
 

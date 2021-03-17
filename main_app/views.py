@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserUpdateForm, ProfileUpdateForm
-from .models import Profile, Event
+from .models import Profile, Event, User
 
 
 
@@ -13,21 +13,21 @@ def home(request):
     return render(request, 'home.html', { 'events': events })
 
 # for register of the user
-def register(response):
+def register(request):
     
-    if response.method == "POST":
+    if request.method == "POST":
 # registerform is made in the form.py file and response with post method
-        form = RegisterForm(response.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
             profile = Profile(user = user, bio = '' )
             profile.save()
-            login(response, user)
+            login(request, user)
         return redirect('profile')
     else:
         form = RegisterForm()
 
-    return render(response, "registration/register.html",{'form' : form})
+    return render(request, "registration/register.html",{'form' : form})
 
 # after logging in they will land on profile by default.
 @login_required
@@ -46,7 +46,9 @@ def profile(request):
         p_form = ProfileUpdateForm(instance=profile)
         u_form = UserUpdateForm(instance = request.user)
 
-    context={'p_form': p_form, 'u_form': u_form}
+    events = Event.objects.filter(users=request.user)
+
+    context={'p_form': p_form, 'u_form': u_form, 'events': events}
 
     return render(request, 'profile.html',context)
 
@@ -55,7 +57,6 @@ def about(request):
     return render(request, 'about.html')
 
 # Event Details
-@login_required
 def event_detail(request, event_id):
     event = Event.objects.get(id=event_id)
     return render(request, 'events/detail.html', { 'event': event })
@@ -66,7 +67,14 @@ def add_registration(request, event_id):
     event = Event.objects.get(id=event_id)
     event.users.add(request.user.id)
     return redirect('detail', event_id=event_id)
-    
+
+# Unregister user for event
+@login_required
+def remove_registration(request, event_id):
+    event = Event.objects.get(id=event_id)
+    event.users.get(request.user.id).delete()
+    return redirect('detail', event_id=event_id)
+
 # search
 def search(request):
     # this is the query that we access from the url which is send from the search form
