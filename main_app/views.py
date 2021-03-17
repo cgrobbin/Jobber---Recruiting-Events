@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserUpdateForm, ProfileUpdateForm
 from .models import Profile, Event
+
+
 
 def home(request):
     events = Event.objects.all().order_by('date')
@@ -14,6 +16,7 @@ def home(request):
 def register(response):
     
     if response.method == "POST":
+# registerform is made in the form.py file and response with post method
         form = RegisterForm(response.POST)
         if form.is_valid():
             user = form.save()
@@ -63,3 +66,23 @@ def add_registration(request, event_id):
     event = Event.objects.get(id=event_id)
     event.users.add(request.user.id)
     return redirect('detail', event_id=event_id)
+    
+# search
+def search(request):
+    # this is the query that we access from the url which is send from the search form
+    query = request.GET['query']
+    # In this way we can use __icontains module to  set any attribute as query.
+    events = Event.objects.filter(title__icontains = query)
+  
+    
+    params = {'events': events, 'query': query }
+    return render(request, 'search.html', params)
+
+# focus contains only three option.
+def searchoption(request):
+    option = request.GET['option']
+    events = Event.objects.filter(focus__icontains = option)
+
+    return render(request, 'search.html',{'events': events})
+
+
