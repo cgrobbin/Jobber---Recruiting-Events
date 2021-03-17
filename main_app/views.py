@@ -7,7 +7,7 @@ from .forms import UserUpdateForm, ProfileUpdateForm
 from .models import Profile, Event
 
 def home(request):
-    events = Event.objects.all().order_by('-date')
+    events = Event.objects.all().order_by('date')
     return render(request, 'home.html', { 'events': events })
 
 # for register of the user
@@ -50,3 +50,16 @@ def profile(request):
 # About View
 def about(request):
     return render(request, 'about.html')
+
+# Event Details
+@login_required
+def event_detail(request, event_id):
+    event = Event.objects.get(id=event_id)
+    return render(request, 'events/detail.html', { 'event': event })
+
+# Register user for event
+# @login_required
+# def add_registration(request, event_id):
+#     event = Event.objects.get(id-event_id)
+#     event.users.add(user_id=request.user.id)
+#     return redirect('detail', event_id=event_id)
