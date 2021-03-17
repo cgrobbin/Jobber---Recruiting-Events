@@ -6,13 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Jobber</title>
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
   <header class="navbar-fixed">
     <nav>
       <div class="nav-wrapper blue">
+     
         <ul>
           <li><a href="/" class="left brand-logo">&nbsp;&nbsp;Jobber</a></li>
         </ul>
@@ -27,10 +30,11 @@
           <li><a href="{% url 'login' %}">Log In</a></li>
         {% endif %}
           
-          
+       
            
         </ul>
-
+       
+        
       </div>
     </nav>
   </header>
@@ -41,5 +45,7 @@
   <footer class="page-footer blue">
     <div class="right">All Rights Reserved, &copy; 2021 Jobber &nbsp;</div>
   </footer>
+
+  
 </body>
 </html>
