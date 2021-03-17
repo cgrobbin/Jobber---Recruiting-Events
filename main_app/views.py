@@ -58,8 +58,8 @@ def event_detail(request, event_id):
     return render(request, 'events/detail.html', { 'event': event })
 
 # Register user for event
-# @login_required
-# def add_registration(request, event_id):
-#     event = Event.objects.get(id-event_id)
-#     event.users.add(user_id=request.user.id)
-#     return redirect('detail', event_id=event_id)
+@login_required
+def add_registration(request, event_id):
+    event = Event.objects.get(id=event_id)
+    event.users.add(request.user.id)
+    return redirect('detail', event_id=event_id)
