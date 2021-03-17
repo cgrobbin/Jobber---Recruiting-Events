@@ -13,7 +13,7 @@
 
 <div class="registration">
     {% if user.is_authenticated %}
-        {% if user.id in event.users.id %}
+        {% if %}
             <form action="{% url 'remove_registration' event.id %}" method="POST">
                 {% csrf_token %}
                 <input type="submit" class="btn blue darken-2" value="Unregister">
