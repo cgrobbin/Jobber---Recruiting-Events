@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
-from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import UserUpdateForm, ProfileUpdateForm, EventForm
 from .models import Profile, Event, User
 from django.contrib import messages
 
@@ -58,6 +58,11 @@ def profile(request):
     context={'p_form': p_form, 'u_form': u_form, 'events': events}
     
     return render(request, 'profile.html',context)
+
+# Public Profile
+def public_profile(request, user_id):
+    user = User.objects.get(id=user_id)
+    return render(request, 'public.html', { 'user': user })
 
 # About View
 def about(request):
@@ -142,10 +147,30 @@ def searchoption(request):
 
     return render(request, 'search.html',{'events': events})
 
+# SuperUser Add Event
+@login_required
+def add_event(request):
+    form = EventForm(request.POST or None)
+    if request.POST and form.is_valid():
+        new_event = form.save(commit=False)
+        new_event.save()
+        return redirect('home')
+    else:
+        return render(request, 'events/new.html', { 'form': form })
 
+# Edit Event
+@login_required
+def event_edit(request, event_id):
+    event = Event.objects.get(id=event_id)
+    event_form = EventForm(request.POST or None, instance=event)
+    if request.POST and event_form.is_valid():
+        event_form.save()
+        return redirect('detail', event_id=event_id)
+    else:
+        return render(request, 'events/edit.html', { 'event': event, 'event_form': event_form })
 
- 
- 
-
-
-
+# Delete Event
+@login_required
+def event_delete(request, event_id):
+    Event.objects.get(id=event_id).delete()
+    return redirect('home')
