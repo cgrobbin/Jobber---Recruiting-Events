@@ -2,7 +2,7 @@
 {% block content %}
 {% comment %} is_authenciated will help to run get the username attribute if they are looged in {% endcomment %}
 {% if user.is_authenticated %}
- 
+
 <h2>Welcome , {{ user.get_username }}</h1>
 <p>{{user.email}}</p>
 <p>{{user.profile.bio}}</p>
@@ -17,14 +17,17 @@
 
 {% endif %}
 
-
+<h5>Your Meeting</h5>
 <div class="row">
     {% if events %}
         {% for event in events %}
             <div class="col s3">
                 <div class="card">
+                    
                     <a href="{% url 'detail' event.id %}">
+                       
                         <div class="card-content">
+                        
                             {% comment %} <p>{{ user.username }}</p> {% endcomment %}
                             <span class="card-title">{{ event.title }}</span>
                             <p>{{ event.description }}</p>
