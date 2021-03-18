@@ -23,8 +23,14 @@
           <li><a href="/about">About</a></li>
 
         {% if user.is_authenticated %}
-          <li><a href="{% url 'profile' %}">Profile</a></li>
-          <li><a href="{% url 'logout' %}">Log Out</a></li>
+          {% if user.is_superuser %}
+            {% comment %} <li>Add Event</li> {% endcomment %}
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+            {% else %}
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+          {% endif %}
         {% else %}
           <li><a href="{% url 'register' %}">Sign Up</a></li>
           <li><a href="{% url 'login' %}">Log In</a></li>
