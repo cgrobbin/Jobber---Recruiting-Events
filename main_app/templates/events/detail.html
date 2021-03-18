@@ -31,4 +31,18 @@
     {% endif %}
 </div> 
 
+{% if user.is_superuser %}
+
+<hr />
+<form action="{% url 'edit' event.id %}" method="GET">
+    <input type="submit" class="btn blue darken-2" value="Edit">
+</form>
+<hr />
+<form action="{% url 'delete' event.id %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" class="btn blue darken-2" value="Delete">
+</form>
+
+{% endif %}
+
 {% endblock %}
