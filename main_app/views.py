@@ -34,6 +34,7 @@ def register(request):
         form = RegisterForm()
         for msg in form.error_messages:
             messages.error(request, form.error_messages[msg])
+            
     return render(request, "registration/register.html",{'form' : form})
 
 # after logging in they will land on profile by default.
@@ -54,7 +55,7 @@ def profile(request):
         u_form = UserUpdateForm(instance = request.user)
 
     events = Event.objects.filter(users=request.user)
-
+    messages.success(request, 'You are logged in')
     context={'p_form': p_form, 'u_form': u_form, 'events': events}
     
     return render(request, 'profile.html',context)
