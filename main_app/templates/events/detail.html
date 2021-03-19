@@ -13,19 +13,19 @@
 
 <div class="registration">
     {% if user.is_authenticated %}
-        
+        {% if registered %}
+            <form action="{% url 'remove_registration' event.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" class="btn blue darken-2"id="unregister" value="Unregister">
+            </form>
+
+        {% else %}
+       <hr>
             <form action="{% url 'add_registration' event.id %}" method="POST">
                 {% csrf_token %}
                 <input type="submit" class="btn blue darken-2"id="register" value="Register">
             </form> 
-
-       <hr>
-            
-              <form action="{% url 'remove_registration' event.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" class="btn blue darken-2"id="unregister" value="Unregister">
-            </form>
-  
+        {% endif %}
     {% else %}
        <bold> Please Log In to Register for this Event <bold>
     {% endif %}

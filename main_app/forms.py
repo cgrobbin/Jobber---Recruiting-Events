@@ -7,7 +7,6 @@ from .models import Profile, Event
 class RegisterForm(UserCreationForm):
     email = forms.EmailField()
     
-
     class Meta:
         model = User
         fields = ['email', 'username', 'password1', 'password2']
@@ -26,4 +25,4 @@ class ProfileUpdateForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model=Event
-        fields=['title', 'date', 'time', 'speakers', 'focus', 'description']
+        fields=['title', 'date', 'time', 'speakers', 'focus', 'description', 'users']
