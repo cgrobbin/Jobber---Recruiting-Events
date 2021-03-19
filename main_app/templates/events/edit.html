@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Editing Event: {{ event.title }}</h2>
+
+<form action="{% url 'edit' event.id %}" method="POST">
+    {% csrf_token %}
+    {{ event_form.as_p }}
+    <input type="submit" class="btn" value="Edit Event">
+</form>
+
+<script>
+    const dateEl = document.getElementById('id_date');
+    M.Datepicker.init(dateEl, {
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoclose: true
+    });
+
+    const focusEl = document.getElementById('id_focus');
+    M.FormSelect.init(focusEl);
+
+    const userEl = document.getElementById('id_users');
+    M.FormSelect.init(userEl);
+</script>
+
+{% endblock  %}

@@ -13,22 +13,36 @@
 
 <div class="registration">
     {% if user.is_authenticated %}
-        
+        {% if registered %}
+            <form action="{% url 'remove_registration' event.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" class="btn blue darken-2"id="unregister" value="Unregister">
+            </form>
+
+        {% else %}
+       <hr>
             <form action="{% url 'add_registration' event.id %}" method="POST">
                 {% csrf_token %}
                 <input type="submit" class="btn blue darken-2"id="register" value="Register">
             </form> 
-
-       <hr>
-            
-              <form action="{% url 'remove_registration' event.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" class="btn blue darken-2"id="unregister" value="Unregister">
-            </form>
-  
+        {% endif %}
     {% else %}
        <bold> Please Log In to Register for this Event <bold>
     {% endif %}
 </div> 
+
+{% if user.is_superuser %}
+
+<hr />
+<form action="{% url 'edit' event.id %}" method="GET">
+    <input type="submit" class="btn blue darken-2" value="Edit">
+</form>
+<hr />
+<form action="{% url 'delete' event.id %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" class="btn blue darken-2" value="Delete">
+</form>
+
+{% endif %}
 
 {% endblock %}
