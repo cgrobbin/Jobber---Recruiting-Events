@@ -2,7 +2,11 @@
 {% block content %}
 
 <h3>{{ event.title }}</h3>
-<p>{{user}}</p>
+
+{% if user.is_superuser %}
+<p>Total Registered: {{ total_registered }}</p>
+{% endif %}
+
 <p>Date: {{ event.date }}</p>
 <p>Time: {{ event.time }}</p>
 
