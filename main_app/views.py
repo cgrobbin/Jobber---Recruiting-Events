@@ -3,22 +3,19 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
-from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import UserUpdateForm, ProfileUpdateForm, EventForm
 from .models import Profile, Event, User
 from django.contrib import messages
 
-
-
-
+# Home View
 def home(request):
     events = Event.objects.all().order_by('date')
     return render(request, 'home.html', { 'events': events })
 
-# for register of the user
+# Register of the user
 def register(request):
-    
     if request.method == "POST":
-# registerform is made in the form.py file and response with post method
+    # registerform is made in the form.py file and response with post method
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -48,16 +45,18 @@ def profile(request):
              messages.success(request, 'You are logged in')
              return redirect('profile')
     else:
-       
         profile = Profile.objects.get(user_id=request.user.id)
         p_form = ProfileUpdateForm(instance=profile)
         u_form = UserUpdateForm(instance = request.user)
 
     events = Event.objects.filter(users=request.user)
-
     context={'p_form': p_form, 'u_form': u_form, 'events': events}
-    
     return render(request, 'profile.html',context)
+
+# Public Profile
+def public_profile(request, user_id):
+    user = User.objects.get(id=user_id)
+    return render(request, 'public.html', { 'user': user })
 
 # About View
 def about(request):
@@ -66,60 +65,37 @@ def about(request):
 # Event Details
 def event_detail(request, event_id):
     event = Event.objects.get(id=event_id)
-    return render(request, 'events/detail.html', { 'event': event})
+    registered = False
+    if request.user:
+        if request.user in event.users.all():
+            registered = True
+    return render(request, 'events/detail.html', { 'event': event, 'registered': registered })
             
 
 # Register user for event
 @login_required
 def add_registration(request, event_id):
     event = Event.objects.get(id=event_id)
-
-    # checked whether the user had that event or not
-    x = event.users.all()
-    for X in x:
-        if X != request.user:
-            event.users.add(request.user)
-            
-        else :
-            messages.error(request, 'Event is already added') 
-    # (request.user.email) == request.user.email:
-        # event.users.add(request.user.id)
-    
-        # print('Its already been added')
-        
-
-
-    # print(request.user)
-    print(event)
-    print(event.users.all())
-    
+    if request.user in event.users.all():
+        messages.error(request, 'Event is already added')
+    else:
+        event.users.add(request.user)
     return redirect('profile')
-    
 
 # Unregister user for event
 @login_required
 def remove_registration(request, event_id):
-    
     event = Event.objects.get(id=event_id)
-
-    # instance = User.objects.get(id=request.user.id)
-    # instance.delete()
-    # event.users.remove(request.user.id)
     x = event.users.all()
     for X in x:
         if X == request.user:
             event.users.remove(request.user.id)
             return render(request, 'landing.html', {'message': "You sure you want to delete all those things"})
-            messages.success(request, 'deleted')
-        else:
-                
-            messages.error(request, 'not deleted')
-            
-    
+            messages.success(request, 'not deleted')
+        else:      
+            messages.error(request, 'deleted')  
     if request.method == 'POST':
         event.users.remove(request.user.id)
-    
-    
     
     return redirect('profile')
     
@@ -128,9 +104,7 @@ def search(request):
     # this is the query that we access from the url which is send from the search form
     query = request.GET['query']
     # In this way we can use __icontains module to  set any attribute as query.
-    events = Event.objects.filter(title__icontains = query)
-  
-    
+    events = Event.objects.filter(title__icontains = query) 
     params = {'events': events, 'query': query }
     return render(request, 'search.html', params)
     
@@ -142,10 +116,30 @@ def searchoption(request):
 
     return render(request, 'search.html',{'events': events})
 
+# SuperUser Add Event
+@login_required
+def add_event(request):
+    form = EventForm(request.POST or None)
+    if request.POST and form.is_valid():
+        new_event = form.save(commit=False)
+        new_event.save()
+        return redirect('home')
+    else:
+        return render(request, 'events/new.html', { 'form': form })
 
+# Edit Event
+@login_required
+def event_edit(request, event_id):
+    event = Event.objects.get(id=event_id)
+    event_form = EventForm(request.POST or None, instance=event)
+    if request.POST and event_form.is_valid():
+        event_form.save()
+        return redirect('detail', event_id=event_id)
+    else:
+        return render(request, 'events/edit.html', { 'event': event, 'event_form': event_form })
 
- 
- 
-
-
-
+# Delete Event
+@login_required
+def event_delete(request, event_id):
+    Event.objects.get(id=event_id).delete()
+    return redirect('home')
