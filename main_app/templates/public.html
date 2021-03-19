@@ -1,22 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% if user.is_authenticated %}
-
-<h2>Welcome , {{ user.get_username }}</h1>
-<p>{{user.email}}</p>
-<p>{{user.profile.bio}}</p>
-<form method='POST' enctype="multipart/form-data">
-    {%csrf_token%}
-    {{u_form.as_p}}
-    {{p_form.as_p}}
-    <button type='submit'>Update</button>
-</form>
+<h2>{{ user.username }}'s Profile</h2>
+<h5>Email: {{ user.email }}</h5>
+<h5>Date Joined: {{ user.date_joined|truncatechars:10 }}</h5>
 <hr />
-
-{% endif %}
-
-<h5>Your Meetings</h5>
+<h5>{{ user.username }}'s Upcoming Meetings</h5>
 <div class="row">
     {% if events %}
         {% for event in events %}
@@ -37,5 +26,4 @@
     {% endif %}
 </div>
 
-
-{% endblock %}
+{% endblock  %}
