@@ -110,15 +110,15 @@ def remove_registration(request, event_id):
     for X in x:
         if X == request.user:
             event.users.remove(request.user.id)
-            return render(request, 'landing.html', {'message': "You sure you want to delete all those things"})
+            return render(request, 'landing.html', {'message': "You sure you want to delete all those things" , 'event': event})
             messages.success(request, 'deleted')
         else:
                 
             messages.error(request, 'not deleted')
             
     
-    if request.method == 'POST':
-        event.users.remove(request.user.id)
+    # if request.method == 'POST':
+    #     event.users.remove(request.user.id)
     
     
     
