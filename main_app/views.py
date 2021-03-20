@@ -14,25 +14,31 @@ def home(request):
 
 # Register of the user
 def register(request):
+    error_message = ''
     if request.method == "POST":
     # registerform is made in the form.py file and response with post method
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            
+            username = form.cleaned_data.get("username")
+            messages.success(request, f'New account Created: {username}')
             profile = Profile(user = user, bio = '' )
             profile.save()
             username = form.cleaned_data.get('username')
+            
             messages.success(request, f'New Account Created: {username}')
             login(request, user)
             messages.success(request, f'you are now logged in as: {username}')
-        return redirect('profile')
+            return redirect('profile')
     else:
         form = RegisterForm()
-        for msg in form.error_messages:
-            messages.error(request, form.error_messages[msg])
+        error_message = 'Invalid sign up - try again'
+        
+        return render(request, 'registration/register.html',{ 'form': form })
+        # for msg in form.error_messages:
+        #     messages.error(request, form.error_messages[msg])
             
-    return render(request, "registration/register.html",{'form' : form})
+    return render(request, "registration/register.html",{'form' : form, 'message': error_message})
 
 # after logging in they will land on profile by default.
 @login_required
@@ -41,21 +47,21 @@ def profile(request):
         p_form = ProfileUpdateForm(request.POST, instance = request.user.profile)
         u_form = UserUpdateForm(request.POST,instance=request.user)
         if p_form.is_valid() and u_form.is_valid():
+            
              u_form.save()
              p_form.save()
-             messages.success(request, 'You are logged in')
+             messages.success(request, 'You are logged in successfully')
              return redirect('profile')
     else:
+       
         profile = Profile.objects.get(user_id=request.user.id)
         p_form = ProfileUpdateForm(instance=profile)
+        
         u_form = UserUpdateForm(instance = request.user)
 
     events = Event.objects.filter(users=request.user)
-<<<<<<< HEAD
-    messages.success(request, 'You are logged in')
-=======
->>>>>>> submain
     context={'p_form': p_form, 'u_form': u_form, 'events': events}
+     
     return render(request, 'profile.html',context)
 
 # Public Profile
@@ -85,6 +91,7 @@ def add_registration(request, event_id):
         messages.error(request, 'Event is already added')
     else:
         event.users.add(request.user)
+        messages.success(request, 'Event has been added')
     return redirect('profile')
 
 # Unregister user for event
@@ -107,19 +114,40 @@ def remove_registration(request, event_id):
 # search
 def search(request):
     # this is the query that we access from the url which is send from the search form
-    query = request.GET['query']
+
+    
+    query1 = request.GET['query']
+    query2 = request.GET['option']
+    
+    
     # In this way we can use __icontains module to  set any attribute as query.
-    events = Event.objects.filter(title__icontains = query) 
-    params = {'events': events, 'query': query }
-    return render(request, 'search.html', params)
+    events = Event.objects.filter(title__icontains = query1, focus__icontains = query2) 
+    # event2 = Event.objects.filter(focus__icontains = query2 )
+
+    # eventaman = Event.objects.get(title = event1 , focus = query2) 
+    # eventnama = Event.objects.get(focus = query2)
+    print(events)
+    if(events):
+        messages.success(request,'this is the result')
+        return render(request, 'search.html',{'events': events})
+
+    elif(not events):
+        messages.error(request, 'There is no such Event')
+        return redirect('home')
+
+    return redirect('search')
+    # print(events1)
+    # events1 = Event.objects.filter(focus__icontains = option)
+    # para= {'events': events,'events1': events }
+    # return render(request, 'search.html', para)
     
 
 # focus contains only three option.
-def searchoption(request):
-    option = request.GET['option']
-    events = Event.objects.filter(focus__icontains = option)
+# def searchoption(request):
+#     option = request.GET['option']
+#     events = Event.objects.filter(focus__icontains = option)
 
-    return render(request, 'search.html',{'events': events})
+#     return render(request, 'search.html',{'events': events})
 
 # SuperUser Add Event
 @login_required
