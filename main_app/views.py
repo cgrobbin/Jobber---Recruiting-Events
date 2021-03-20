@@ -14,6 +14,7 @@ def home(request):
 
 # Register of the user
 def register(request):
+    error_message = ''
     if request.method == "POST":
     # registerform is made in the form.py file and response with post method
         form = RegisterForm(request.POST)
@@ -29,9 +30,10 @@ def register(request):
         return redirect('profile')
     else:
         form = RegisterForm()
+        error_message = 'Invalid Sign Up - Try Again'
         for msg in form.error_messages:
             messages.error(request, form.error_messages[msg])
-    return render(request, "registration/register.html",{'form' : form})
+    return render(request, "registration/register.html",{'form' : form, 'error_message': error_message})
 
 # after logging in they will land on profile by default.
 @login_required
