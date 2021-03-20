@@ -69,6 +69,10 @@ footer {
   font-weight: bolder;
 }
 
+.sidenav-overlay {
+  z-index: -1;
+}
+
 @media only screen and (max-width: 789px) {
   .row {
     margin: auto;
