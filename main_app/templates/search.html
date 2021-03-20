@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    
+
+ 
+<h2>Search Results:</h2>
+{% comment %} it will help us to display the message. events itself is a disctionary if it is none then following message will show {% endcomment %}
+{%if events|length < 1 %}
+{% comment %} querry is carried over here through the params that we define in the views of search {% endcomment %}
+<p>Your search <b>{{query}}</b> did not match. Try again</p>
+{% endif %}
+
+
+
+<div class="row">
+    {% for event in events %}
+        <div class="col l3 m6">
+            <div class="card small z-depth-3">
+            <a href="{% url 'detail' event.id %}">
+                <div class="card-content black-text">
+                    <span class="card-title">{{ event.title }}</span>
+                    <p>{{ event.description|truncatechars:80 }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+

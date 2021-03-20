@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="admin-header">Add An Event</h2>
+
+<form action="{% url 'add_event' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn blue darken-2" value="Add Event">
+</form>
+
+<script>
+    const dateEl = document.getElementById('id_date');
+    M.Datepicker.init(dateEl, {
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoclose: true
+    });
+
+    const focusEl = document.getElementById('id_focus');
+    M.FormSelect.init(focusEl);
+
+    const userEl = document.getElementById('id_users');
+    M.FormSelect.init(userEl);
+
+</script>
+
+{% endblock  %}
