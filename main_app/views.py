@@ -76,11 +76,17 @@ def about(request):
 # Event Details
 def event_detail(request, event_id):
     event = Event.objects.get(id=event_id)
+    total_registered = len(event.users.all())
     registered = False
     if request.user:
         if request.user in event.users.all():
             registered = True
-    return render(request, 'events/detail.html', { 'event': event, 'registered': registered })
+    context = {
+        'event': event,
+        'registered': registered,
+        'total_registered': total_registered
+    }
+    return render(request, 'events/detail.html', context)
             
 
 # Register user for event

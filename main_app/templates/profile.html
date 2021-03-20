@@ -3,14 +3,18 @@
 
 {% if user.is_authenticated %}
 
-<h2>Welcome , {{ user.get_username }}</h1>
-<p>{{user.email}}</p>
-<p>{{user.profile.bio}}</p>
+<h2 class="welcome">Welcome , {{ user.get_username }}</h1>
+<p>Email: {{user.email}}</p>
+<p>Bio: {{user.profile.bio}}</p>
+
+<hr />
+
+<p>Edit Profile Information Below:</p>
 <form method='POST' enctype="multipart/form-data">
     {%csrf_token%}
     {{u_form.as_p}}
     {{p_form.as_p}}
-    <button type='submit'>Update</button>
+    <input type="submit" class="btn blue darken-2" value="Update">
 </form>
 <hr />
 
@@ -20,8 +24,8 @@
 <div class="row">
     {% if events %}
         {% for event in events %}
-            <div class="col s3">
-                <div class="card medium"> 
+            <div class="col l3 m6">
+                <div class="card medium z-depth-3"> 
                     <a href="{% url 'detail' event.id %}">
                         <div class="card-content">
                             <span class="card-title black-text">{{ event.title }}</span>

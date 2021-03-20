@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Editing Event: {{ event.title }}</h2>
+<h2 class="admin-header">Editing Event: {{ event.title }}</h2>
 
 <form action="{% url 'edit' event.id %}" method="POST">
     {% csrf_token %}
     {{ event_form.as_p }}
-    <input type="submit" class="btn" value="Edit Event">
+    <input type="submit" class="btn blue darken-2" value="Edit Event">
 </form>
 
 <script>

@@ -6,9 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Jobber</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css/' %}">
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
 </head>
@@ -18,9 +23,11 @@
       <div class="nav-wrapper blue">
      
         <ul>
-          <li><a href="/" class="left brand-logo">&nbsp;&nbsp;Jobber</a></li>
+          <li><a href="/" id="logo" class="left brand-logo">&nbsp;&nbsp;Jobber</a></li>
         </ul>
-        <ul class="right">
+
+        <a href="#" data-target="mobile-menu" class="right sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
           <li><a href="/about">About</a></li>
 
         {% if user.is_authenticated %}
@@ -36,15 +43,39 @@
           <li><a href="{% url 'register' %}">Sign Up</a></li>
           <li><a href="{% url 'login' %}">Log In</a></li>
         {% endif %}
-          
-       
-           
+             
         </ul>
        
+
         
       </div>
       
     </nav>
+
+        <ul class="sidenav" id="mobile-menu">
+           <li><a href="/about">About</a></li>
+
+        {% if user.is_authenticated %}
+          {% if user.is_superuser %}
+            <li><a href="{% url 'add_event' %}">Add Event</a></li>
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+            {% else %}
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+          {% endif %}
+        {% else %}
+          <li><a href="{% url 'register' %}">Sign Up</a></li>
+          <li><a href="{% url 'login' %}">Log In</a></li>
+        {% endif %}
+        </ul>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+          let elems = document.querySelectorAll('.sidenav');
+          let instances = M.Sidenav.init(elems, {});
+          });
+        </script>
    
     {% if messages %}
       {%for message in messages %}

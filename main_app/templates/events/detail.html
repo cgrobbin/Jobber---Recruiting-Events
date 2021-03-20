@@ -1,35 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h3>{{ event.title }}</h3>
-<p>{{user}}</p>
-<p>Date: {{ event.date }}</p>
-<p>Time: {{ event.time }}</p>
+<h3 class="label">{{ event.title }}</h3>
 
-<p>Industry Focus: {{ event.get_focus_display }}</p>
-<p>Speaker(s): {{ event.speakers }}</p>
-
-<p>Description: {{ event.description }}</p>
-
-<div class="registration">
-    {% if user.is_authenticated %}
-        {% if registered %}
-            <form action="{% url 'remove_registration' event.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" class="btn blue darken-2"id="unregister" value="Unregister">
-            </form>
-
-        {% else %}
-       <hr>
-            <form action="{% url 'add_registration' event.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" class="btn blue darken-2"id="register" value="Register">
-            </form> 
-        {% endif %}
-    {% else %}
-       <bold> Please Log In to Register for this Event <bold>
+<div class="detail">
+    {% if user.is_superuser %}
+    <p>Total Registered: {{ total_registered }}</p>
     {% endif %}
-</div> 
+
+    <p>Date: {{ event.date }}</p>
+    <p>Time: {{ event.time }}</p>
+
+    <p>Industry Focus: {{ event.get_focus_display }}</p>
+    <p>Speaker(s): {{ event.speakers }}</p>
+
+    <p>Description: {{ event.description }}</p>
+
+    <div class="registration">
+        {% if user.is_authenticated %}
+            {% if registered %}
+                <form action="{% url 'remove_registration' event.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" class="btn blue darken-2"id="unregister" value="Unregister">
+                </form>
+
+            {% else %}
+        <hr>
+                <form action="{% url 'add_registration' event.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" class="btn blue darken-2"id="register" value="Register">
+                </form> 
+            {% endif %}
+        {% else %}
+        <bold> Please Log In to Register for this Event <bold>
+        {% endif %}
+    </div> 
+</div>
 
 {% if user.is_superuser %}
 

@@ -11,19 +11,32 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dotenv
+# import environ
+# env = environ.Env(
+#     DEBUG=(bool, False)
+# )
+# environ.Env.read_env()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'uzuq@i3j5a95!ipl(ktirhnvg$sqea)12d=fo2k&!kh-ypaoo+'
+# os.environ['SECRET_KEY'] = env('SECRET_KEY')
+SECRET_KEY = os.environ['SECRET_KEY']
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['DEBUG']
 
 ALLOWED_HOSTS = []
 
@@ -137,3 +150,6 @@ STATIC_URL = '/static/'
 LOGOUT_REDIRECT_URL = '/'
 
 LOGIN_URL='login'
+
+import django_heroku
+django_heroku.settings(locals())
