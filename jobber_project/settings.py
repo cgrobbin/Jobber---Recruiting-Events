@@ -136,6 +136,4 @@ STATIC_URL = '/static/'
 
 LOGOUT_REDIRECT_URL = '/'
 
-# LOGIN_URL='login'
-# import django_on_heroku
-# django_on_heroku.settings(locals())
+LOGIN_URL='login'
