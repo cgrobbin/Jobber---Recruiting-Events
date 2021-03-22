@@ -121,19 +121,12 @@ def remove_registration(request, event_id):
 # search
 def search(request):
     # this is the query that we access from the url which is send from the search form
-
-    
     query1 = request.GET['query']
     query2 = request.GET['option']
     
-    
     # In this way we can use __icontains module to  set any attribute as query.
     events = Event.objects.filter(title__icontains = query1, focus__icontains = query2) 
-    # event2 = Event.objects.filter(focus__icontains = query2 )
 
-    # eventaman = Event.objects.get(title = event1 , focus = query2) 
-    # eventnama = Event.objects.get(focus = query2)
-    print(events)
     if(events):
         messages.success(request,'this is the result')
         return render(request, 'search.html',{'events': events})
@@ -143,18 +136,6 @@ def search(request):
         return redirect('home')
 
     return redirect('search')
-    # print(events1)
-    # events1 = Event.objects.filter(focus__icontains = option)
-    # para= {'events': events,'events1': events }
-    # return render(request, 'search.html', para)
-    
-
-# focus contains only three option.
-# def searchoption(request):
-#     option = request.GET['option']
-#     events = Event.objects.filter(focus__icontains = option)
-
-#     return render(request, 'search.html',{'events': events})
 
 # SuperUser Add Event
 @login_required
