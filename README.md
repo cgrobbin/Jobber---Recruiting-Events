@@ -25,10 +25,10 @@ Jobber is a site for finding recruitment events available around the country. Us
 
 ## Screenshots
 
-![Home](https://i.imgur.com/7Vag09ul.png) ![About](https://i.imgur.com/LYEE7w7l.png)
-![Register](https://i.imgur.com/hsgjeQgl.png) ![Login](https://i.imgur.com/4DvZwFMl.png)
-![Profile](https://i.imgur.com/lMu82ZRl.png) ![Search](https://i.imgur.com/SJFtBrCl.png)
-![Event](https://i.imgur.com/edht4F3l.png) ![Add Event](https://i.imgur.com/dIM6VZvl.png)
+![Home](https://i.imgur.com/7Vag09um.png) ![About](https://i.imgur.com/LYEE7w7m.png)
+![Register](https://i.imgur.com/hsgjeQgm.png) ![Login](https://i.imgur.com/4DvZwFMm.png)
+![Profile](https://i.imgur.com/lMu82ZRm.png) ![Search](https://i.imgur.com/SJFtBrCm.png)
+![Event](https://i.imgur.com/edht4F3m.png) ![Add Event](https://i.imgur.com/dIM6VZvm.png)
 
 ## ERD Model
 
