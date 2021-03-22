@@ -69,6 +69,10 @@ footer {
   font-weight: bolder;
 }
 
+.public {
+  font-family: 'Montserrat';
+}
+
 .sidenav-overlay {
   z-index: -1;
 }
