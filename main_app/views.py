@@ -67,7 +67,8 @@ def profile(request):
 # Public Profile
 def public_profile(request, user_id):
     user = User.objects.get(id=user_id)
-    return render(request, 'public.html', { 'user': user })
+    events = Event.objects.filter(users=user)
+    return render(request, 'public.html', { 'user': user, 'events': events })
 
 # About View
 def about(request):
